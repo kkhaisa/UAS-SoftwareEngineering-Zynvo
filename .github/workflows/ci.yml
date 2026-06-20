@@ -1,0 +1,28 @@
+name: Zynvo Backend Integration Testing
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  test-auth:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js environment
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18"
+
+      - name: Install dependencies
+        run: |
+          npm init -y
+          npm install express jsonwebtoken bcryptjs mysql2
+
+      - name: Verify server syntax integrity
+        run: node -c server.js
