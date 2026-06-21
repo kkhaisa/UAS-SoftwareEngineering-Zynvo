@@ -1,5 +1,4 @@
 # UAS-SoftwareEngineering-Zynvo
-# ZYNVO - Smart Campus Event Management
 
 Zynzo adalah purwarupa aplikasi manajemen kegiatan kampus cerdas (*Smart Campus Event Management*) yang dirancang khusus untuk lingkungan akademis Universitas Pembangunan Jaya. Aplikasi ini mengusung pendekatan *Mobile-First responsive design* untuk memberikan pengalaman terbaik bagi mahasiswa dalam mengakses informasi dan partisipasi kegiatan kampus.
 
