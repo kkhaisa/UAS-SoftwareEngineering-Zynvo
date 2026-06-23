@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ZYNVO - Daftar Event</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        background-color: #f1f2f6;
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        margin: 0;
+      }
+      .phone-wrapper {
+        background-color: #b4b0ff;
+        width: 100%;
+        max-width: 410px;
+        height: 100vh;
+        max-height: 840px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+        display: flex;
+        flex-direction: column;
+        position: relative;
+        overflow-y: auto;
+      }
+      .header-section {
+        padding: 50px 30px 25px 30px;
+        color: #3b2a82;
+      }
+      .content-section {
+        background-color: #c3c0ff;
+        flex: 1;
+        border-top-left-radius: 40px;
+        border-top-right-radius: 40px;
+        padding: 30px 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+      }
+      .event-card-custom {
+        background-color: #ffffff;
+        border-radius: 20px;
+        padding: 20px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        border: none;
+        position: relative;
+      }
+      .event-title {
+        color: #3f3293;
+        font-weight: 700;
+        font-size: 17px;
+        margin-bottom: 8px;
+        padding-right: 70px;
+      }
+      .badge-custom {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background-color: #fff2b2;
+        color: #3f3293;
+        font-weight: bold;
+        font-size: 11px;
+        padding: 5px 12px;
+        border-radius: 50px;
+        box-shadow: 0 2px 6px rgba(255, 242, 178, 0.4);
+      }
+      .event-info-item {
+        font-size: 13.5px;
+        color: #4a3f9e;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 6px;
+      }
+      .event-info-item i {
+        color: #6c5ce7;
+        font-size: 15px;
+      }
+      .event-info-item:last-child {
+        margin-bottom: 0;
+      }
+      .loading-text {
+        text-align: center;
+        color: #4a3f9e;
+        font-weight: 500;
+        margin-top: 30px;
+      }
+      .phone-wrapper::-webkit-scrollbar {
+        width: 0px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="phone-wrapper">
+      <div class="header-section">
+        <h1 class="fw-bold display-6">Daftar Event</h1>
+        <p class="lead small mb-0" style="color: #4a3f9e">
+          Eksplorasi kegiatan seru di UPJ
+        </p>
+      </div>
+
+      <div class="content-section" id="eventContainer">
+        <div class="loading-text">
+          <div
+            class="spinner-border spinner-border-sm me-2"
+            role="status"
+          ></div>
+          Memuat data event...
+        </div>
+      </div>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", async () => {
+        const eventContainer = document.getElementById("eventContainer");
+
+        try {
+          const response = await fetch("http://localhost:3000/api/events");
+          const result = await response.json();
+
+          if (response.ok && result.data && result.data.length > 0) {
+            eventContainer.innerHTML = ""; // Bersihkan teks pemuatan
+
+            result.data.forEach((event) => {
+              const cardHTML = `
+                <div class="event-card-custom">
+                  <span class="badge-custom">${event.kategori}</span>
+                  <div class="event-title">${event.nama_event}</div>
+                  <div class="event-info-item">
+                    <i class="bi bi-calendar3"></i>
+                    <span>${event.tanggal}</span>
+                  </div>
+                  <div class="event-info-item">
+                    <i class="bi bi-geo-alt"></i>
+                    <span>${event.lokasi}</span>
+                  </div>
+                  <div class="event-info-item">
+                    <i class="bi bi-people"></i>
+                    <span>Kuota: <b>${event.kuota} Orang</b></span>
+                  </div>
+                </div>
+              `;
+              eventContainer.innerHTML += cardHTML;
+            });
+          } else {
+            eventContainer.innerHTML = `<div class="loading-text">Tidak ada event yang tersedia saat ini.</div>`;
+          }
+        } catch (error) {
+          eventContainer.innerHTML = `
+            <div class="alert alert-danger m-2 text-center small" style="border-radius: 15px;" role="alert">
+              Gagal menyambungkan ke server backend!
+            </div>
+          `;
+        }
+      });
+    </script>
+  </body>
+</html>
